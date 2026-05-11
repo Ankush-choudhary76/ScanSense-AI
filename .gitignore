@@ -5,5 +5,3 @@ __pycache__/
 node_modules/
 
 .env
-backend/chat.db
-chat.db
