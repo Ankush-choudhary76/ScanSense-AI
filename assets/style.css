@@ -1,0 +1,364 @@
+/* =========================================
+   SCANSENSE AI - GLOBAL CUSTOM STYLES
+   Master CSS injection for Streamlit Overhaul
+   ========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-main: #0B1115;
+    --bg-sidebar: #10161D;
+    --bg-input: #17212B;
+    --bg-user-bubble: #172B3F;
+
+    --accent-cyan: #1CEEE0;
+    --text-primary: #E5E7EB;
+    --text-secondary: #8B9BB4;
+    --border-light: rgba(255, 255, 255, 0.05);
+
+    --font-stack: 'Inter', -apple-system, sans-serif;
+}
+
+/* Base Overrides */
+.stApp {
+    background-color: var(--bg-main) !important;
+    font-family: var(--font-stack) !important;
+}
+
+[data-testid="stSidebar"] {
+    background-color: var(--bg-sidebar) !important;
+    border-right: 1px solid var(--border-light) !important;
+}
+
+/* Hide Default Streamlit Clutter, BUT keep the header so sidebar toggle works! */
+#MainMenu,
+footer,
+.stAppDeployButton,
+.stDeployButton,
+#stDecoration,
+[data-testid="stStatusWidget"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+header[data-testid="stHeader"] {
+    background: transparent !important;
+}
+
+/* Top Navigation Bar Simulation */
+.top-nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background-color: var(--bg-main);
+    border-bottom: 1px solid var(--border-light);
+    z-index: 999999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 1.5px;
+    margin-left: 20rem;
+    /* Give room for sidebar, adjusted via streamlit media queries naturally if possible, but safe offset here */
+}
+
+.system-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--accent-cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--accent-cyan);
+}
+
+.protocol-text {
+    opacity: 0.5;
+}
+
+/* Sidebar Branding (Logo) */
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem 0 2rem 0;
+}
+
+.logo-glow {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #1CEEE0, #0088CC);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    box-shadow: 0 0 15px rgba(28, 238, 224, 0.4);
+}
+
+.brand-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* New Chat Button */
+.new-chat-wrapper button {
+    width: 100% !important;
+    background-color: transparent !important;
+    border: 1px solid rgba(28, 238, 224, 0.2) !important;
+    color: var(--accent-cyan) !important;
+    border-radius: 12px !important;
+    padding: 0.75rem !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease;
+}
+
+.new-chat-wrapper button:hover {
+    background-color: rgba(28, 238, 224, 0.05) !important;
+    border-color: rgba(28, 238, 224, 0.6) !important;
+}
+
+.history-header {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+    margin: 30px 0 10px 0;
+    text-transform: uppercase;
+}
+
+/* Sidebar History Items & Icons - Remove default button boxing! */
+[data-testid="stSidebar"] button[kind="secondary"] {
+    background: transparent !important;
+    border: none !important;
+    padding: 5px 2px !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+    font-size: 0.85rem !important;
+    color: var(--text-secondary) !important;
+    box-shadow: none !important;
+}
+
+[data-testid="stSidebar"] button[kind="secondary"]:hover {
+    color: var(--text-primary) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.empty-state-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3vh;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.huge-logo {
+    width: auto;
+    height: auto;
+    padding: 10px 40px;
+    background: linear-gradient(135deg, #1CEEE0, #0088CC);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 24px;
+    box-shadow: 0 0 30px rgba(28, 238, 224, 0.3);
+    margin-bottom: 15px;
+}
+
+.custom-image-logo {
+    width: auto;
+    max-width: 90%;
+    height: 180px;
+    border-radius: 16px;
+    object-fit: contain;
+    margin-bottom: 5px;
+    filter: drop-shadow(0 0 25px rgba(28, 238, 224, 0.3));
+}
+
+.sidebar-brand-custom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0 1.5rem 0;
+}
+
+.custom-sidebar-logo {
+    width: 90%;
+    max-width: 220px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 15px rgba(28, 238, 224, 0.2));
+}
+
+.welcome-title {
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.welcome-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    text-align: center;
+    max-width: 500px;
+    line-height: 1.6;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 900px;
+}
+
+.feature-card {
+    background-color: rgba(23, 33, 43, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s ease;
+    min-height: 180px;
+}
+
+.feature-card:hover {
+    background-color: rgba(23, 33, 43, 0.8);
+    border-color: rgba(28, 238, 224, 0.3);
+    transform: translateY(-3px);
+}
+
+.card-icon {
+    font-size: 24px;
+    color: var(--accent-cyan);
+    margin-bottom: 16px;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.card-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Chat Messages */
+[data-testid="stChatMessage"] {
+    background-color: transparent !important;
+    padding: 1.5rem 0 !important;
+    border-bottom: none !important;
+}
+
+/* Hide Default Avatars to replace with CSS */
+[data-testid="chatAvatarIcon-user"],
+[data-testid="chatAvatarIcon-assistant"] {
+    display: none !important;
+}
+
+div[data-testid="stChatMessageContent"] {
+    color: var(--text-primary) !important;
+    line-height: 1.6 !important;
+}
+
+/* Custom User Bubble Wrapping */
+.user-bubble {
+    background-color: var(--bg-user-bubble);
+    padding: 1rem 1.5rem;
+    border-radius: 18px;
+    border-top-right-radius: 4px;
+    color: white;
+    max-width: 80%;
+    margin-bottom: 1rem;
+}
+
+/* Input Area Restyling */
+div[data-testid="stChatInput"] {
+    padding-bottom: 0rem !important;
+    margin-bottom: 0rem !important;
+    background-color: transparent !important;
+}
+
+div[data-testid="stChatInput"] textarea {
+    background-color: var(--bg-input) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 24px !important;
+    padding-left: 45px !important;
+    color: #fff !important;
+    font-size: 1rem !important;
+}
+
+div[data-testid="stChatInput"] textarea:focus {
+    border-color: var(--accent-cyan) !important;
+}
+
+/* Action toolbars below assistant */
+.assistant-toolbar {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.action-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.action-btn:hover {
+    color: var(--text-primary);
+}
+
+.disclaimer-footer {
+    text-align: center;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.2);
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Adjustments for block margins */
+.block-container {
+    padding-top: 0rem !important;
+    padding-bottom: 0rem !important;
+}
