@@ -8,6 +8,78 @@ If you want to understand how every single file in the code works line-by-line, 
 
 ---
 
+## 🏗️ Architecture & Technology Stack
+
+### Languages & Technologies Used
+* **Python**: Core backend programming language.
+* **JavaScript (Vanilla JS)**: Frontend logic and interactivity.
+* **HTML5 & CSS3**: UI structure and styling (using Tailwind CSS for design).
+* **FastAPI**: High-performance backend web framework.
+* **SQLite**: Lightweight local database (`chat.db`) for storing user sessions, messages, and memory summaries.
+* **LangGraph & LangChain**: AI workflow orchestration, message building, and agent routing.
+* **Groq API**: Extremely fast LLM inference engine hosting the **Llama 4 Scout** model.
+* **PyPDF2 & Pillow**: File processing libraries to extract text from medical PDFs and encode X-ray/MRI images.
+
+### High-Level System Architecture
+
+```mermaid
+graph TD
+    User([User]) -->|Upload files & Interact| Browser[Browser]
+    
+    subgraph FRONTEND [FRONTEND (Vanilla JS + Tailwind)]
+        HTML[index.html<br>Structure]
+        CSS[styles.css<br>Tailwind theme]
+        JS[app.js<br>All JS logic]
+    end
+
+    Browser --> FRONTEND
+    FRONTEND -->|REST API JSON| Backend
+    Backend -.->|SSE Stream| FRONTEND
+    
+    subgraph BACKEND [BACKEND (FastAPI / Python)]
+        Server[FastAPI Server<br>main.py]
+        Routes[chat_routes, upload_routes<br>session_routes, chat_controller]
+        Service[ai_service.py<br>LangGraph workflow]
+    end
+
+    Backend -->|File bytes| Processing[FILE PROCESSING<br>PyPDF2, Pillow, AI Validator]
+    Processing -->|Extracted context| Backend
+    
+    Backend -->|SQL SELECT / INSERT| DB[(DATABASE SQLite - chat.db<br>sessions, messages, memory_summaries)]
+    
+    Backend -->|Messages / Context| AI_Pipeline
+    
+    subgraph AI_Pipeline [AI PIPELINE (LangGraph)]
+        Builder[Message Builder<br>sys prompt + history]
+        Graph[LangGraph<br>START -> call_model -> END]
+        ChatGroq[ChatGroq<br>API call + context]
+        SSE[SSE Response<br>chunks streamed]
+    end
+
+    AI_Pipeline -->|API Request| Groq[GROQ API<br>Llama 4 Scout 17b]
+    Groq -->|Response Chunks| AI_Pipeline
+    AI_Pipeline -.->|Stream| Backend
+
+    classDef default fill:#1e1e24,stroke:#555,stroke-width:2px,color:#fff;
+    classDef user fill:#003f5c,stroke:#2f4b7c,color:#fff;
+    classDef frontend fill:#0f4c75,stroke:#3282b8,color:#fff;
+    classDef backend fill:#114232,stroke:#87a922,color:#fff;
+    classDef pipeline fill:#b95d1e,stroke:#fca311,color:#fff;
+    classDef processing fill:#6a0572,stroke:#ab83a1,color:#fff;
+    classDef groq fill:#4a1c40,stroke:#8d3b72,color:#fff;
+    classDef db fill:#8c6216,stroke:#fbbc04,color:#fff;
+
+    class User,Browser user;
+    class FRONTEND,HTML,CSS,JS frontend;
+    class BACKEND,Server,Routes,Service backend;
+    class AI_Pipeline,Builder,Graph,ChatGroq,SSE pipeline;
+    class Processing processing;
+    class Groq groq;
+    class DB db;
+```
+
+---
+
 ## 🚀 How to Run the App (Step-by-Step)
 
 ### Step 1: Install Python

@@ -49,25 +49,25 @@ class ChatRequest(BaseModel):
 class SessionCreate(BaseModel):
     title: Optional[str] = None
 
-@app.post("/api/sessions")
+@app.post("/api/sessions")  # Create new chat session
 def new_session(session: SessionCreate):
     session_id = create_session(session.title)
     return {"session_id": session_id}
 
-@app.get("/api/sessions")
+@app.get("/api/sessions")   # List all chat sessions
 def list_sessions():
     return {"sessions": get_all_sessions()}
 
-@app.get("/api/sessions/{session_id}/history")
+@app.get("/api/sessions/{session_id}/history")  # Get chat history for a session 
 def get_history(session_id: int):
     return {"history": get_chat_history(session_id)}
 
-@app.delete("/api/sessions/{session_id}")
+@app.delete("/api/sessions/{session_id}")   # Delete a chat session
 def delete_chat_session(session_id: int):
     delete_session(session_id)
     return {"status": "deleted"}
 
-@app.post("/api/upload")
+@app.post("/api/upload")    # Upload a image or PDF file and extract content
 async def upload_file(file: UploadFile = File(...)):
     """ Endpoint to extract content from images and pdfs and validate them """
     try:
@@ -110,7 +110,7 @@ async def upload_file(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/api/chat")
+@app.post("/api/chat")  # send a message and get AI response (with SSE streaming)
 async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks):
     if not request.session_id:
         request.session_id = create_session(request.message[:30] + "...")
