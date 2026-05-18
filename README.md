@@ -26,7 +26,7 @@ If you want to understand how every single file in the code works line-by-line, 
 graph TD
     User([User]) -->|Upload files & Interact| Browser[Browser]
     
-    subgraph FRONTEND [FRONTEND (Vanilla JS + Tailwind)]
+    subgraph FRONTEND ["FRONTEND (Vanilla JS + Tailwind)"]
         HTML[index.html<br>Structure]
         CSS[styles.css<br>Tailwind theme]
         JS[app.js<br>All JS logic]
@@ -36,7 +36,7 @@ graph TD
     FRONTEND -->|REST API JSON| Backend
     Backend -.->|SSE Stream| FRONTEND
     
-    subgraph BACKEND [BACKEND (FastAPI / Python)]
+    subgraph BACKEND ["BACKEND (FastAPI / Python)"]
         Server[FastAPI Server<br>main.py]
         Routes[chat_routes, upload_routes<br>session_routes, chat_controller]
         Service[ai_service.py<br>LangGraph workflow]
@@ -49,7 +49,7 @@ graph TD
     
     Backend -->|Messages / Context| AI_Pipeline
     
-    subgraph AI_Pipeline [AI PIPELINE (LangGraph)]
+    subgraph AI_Pipeline ["AI PIPELINE (LangGraph)"]
         Builder[Message Builder<br>sys prompt + history]
         Graph[LangGraph<br>START -> call_model -> END]
         ChatGroq[ChatGroq<br>API call + context]
