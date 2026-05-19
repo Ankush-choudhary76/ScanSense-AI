@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-
 # App Configuration
 PAGE_TITLE = "ScanSense AI"
 LAYOUT = "wide"
