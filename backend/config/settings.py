@@ -6,7 +6,6 @@ load_dotenv()
 
 
 
-
 # App Configuration
 PAGE_TITLE = "ScanSense AI"
 LAYOUT = "wide"
