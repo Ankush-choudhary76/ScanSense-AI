@@ -1,6 +1,6 @@
 # ScanSense AI 🧿
 
-Welcome to **ScanSense AI**! This is a specialized, AI-powered medical assistant. It helps users analyze medical reports (PDFs) and medical images (X-rays, MRIs, etc.) using the powerful Llama model via Groq, intelligently orchestrated by **LangChain** and **LangGraph**, serving JSON endpoints via a high-performance **FastAPI** backend, and displayed on a clean 
+Welcome to **ScanSense AI**! This is a specialized, AI-powered medical assistant. It helps users analyze medical reports (PDFs) and medical images (X-rays, MRIs, etc.) using the powerful Llama model via Groq, intelligently orchestrated by **LangChain** and **LangGraph**, serving JSON endpoints via a high-performance **FastAPI** backend, and displayed on a clean **Vanilla JS** frontend.
 
 🌐 **Live Demo:** [Click here to try ScanSense AI live!](https://scansense-ai-x59u.onrender.com/)
 
