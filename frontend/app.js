@@ -18,6 +18,7 @@ const ACTIVE_CHAT_KEY = "scansense_active_chat_v1";
 
 
 
+
 // --- Inline Markdown Renderer (line-by-line, reliable) ---
 function renderMarkdown(text) {
   if (!text) return '';
