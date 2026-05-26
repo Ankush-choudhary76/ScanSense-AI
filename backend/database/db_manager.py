@@ -13,7 +13,6 @@ DB_NAME = os.path.join(DB_DIR, "chat.db")
 
 
 
-
 def init_db():
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
