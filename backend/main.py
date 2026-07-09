@@ -185,6 +185,16 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
 
     return StreamingResponse(sse_event_generator(), media_type="text/event-stream")
 
+@app.get("/api/debug")
+def debug_env():
+    import os
+    key = os.getenv("GROQ_API_KEY")
+    return {
+        "groq_key_exists": key is not None,
+        "groq_key_length": len(key) if key else 0,
+        "groq_key_prefix": key[:6] if key else "None"
+    }
+
 # --- Static File Serving (Connect Frontend) ---
 
 # Get the absolute path to the frontend directory
