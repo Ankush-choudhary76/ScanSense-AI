@@ -67,9 +67,9 @@ def delete_chat_session(session_id: int):
     delete_session(session_id)
     return {"status": "deleted"}
 
-@app.post("/api/upload")    # Upload a image or PDF file and extract content
+@app.post("/api/upload")    # Upload a image or PDF/Word/Image file and extract content
 async def upload_file(file: UploadFile = File(...)):
-    """ Endpoint to extract content from images and pdfs and validate them """
+    """ Endpoint to extract content from files and return context """
     try:
         content = await file.read()
         file_ext = os.path.splitext(file.filename)[1].lower()
@@ -83,11 +83,30 @@ async def upload_file(file: UploadFile = File(...)):
             pdf_reader = PyPDF2.PdfReader(io.BytesIO(content))
             for page in pdf_reader.pages:
                 extracted_context += page.extract_text()
-            
-            if not is_medical_content(extracted_context, 'pdf'):
-                raise HTTPException(status_code=400, detail="The uploaded PDF does not appear to be medical in nature.")
                 
-        elif file_ext in ['.png', '.jpg', '.jpeg']:
+        elif file_ext == '.docx':
+            content_type = 'pdf'  # Treat document text context same as pdf
+            import docx
+            doc = docx.Document(io.BytesIO(content))
+            text_runs = []
+            for p in doc.paragraphs:
+                if p.text.strip():
+                    text_runs.append(p.text)
+            for table in doc.tables:
+                for row in table.rows:
+                    row_text = [cell.text.strip() for cell in row.cells if cell.text.strip()]
+                    if row_text:
+                        text_runs.append(" | ".join(row_text))
+            extracted_context = "\n".join(text_runs)
+            
+        elif file_ext == '.doc':
+            content_type = 'pdf'  # Treat document text context same as pdf
+            import re
+            # Extract plain text sequences from old binary .doc files as a fallback
+            printable_sequences = re.findall(rb'[a-zA-Z0-9\s\.,;:!\?\-\(\)\'\"\r\n]{4,}', content)
+            extracted_context = "\n".join([seq.decode('utf-8', errors='ignore').strip() for seq in printable_sequences])
+                
+        elif file_ext in ['.png', '.jpg', '.jpeg', '.jpe', '.webp', '.bmp', '.gif', '.tiff']:
             content_type = 'image'
             image = Image.open(io.BytesIO(content))
             buffered = io.BytesIO()
@@ -95,10 +114,8 @@ async def upload_file(file: UploadFile = File(...)):
             encoded_image = base64.b64encode(buffered.getvalue()).decode('utf-8')
             extracted_context = encoded_image
             
-            if not is_medical_content(encoded_image, 'image'):
-                raise HTTPException(status_code=400, detail="The uploaded image does not appear to be medical in nature.")
         else:
-            raise HTTPException(status_code=400, detail="Unsupported file format")
+            raise HTTPException(status_code=400, detail=f"Unsupported file format: {file_ext}")
 
         return {
             "status": "success",

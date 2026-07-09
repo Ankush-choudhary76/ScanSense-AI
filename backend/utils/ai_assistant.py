@@ -118,17 +118,15 @@ def stream_chat_response(chat_history, context, content_type, user_text, long_te
             messages.append(AIMessage(content=msg["content"]))
 
     # --- CURRENT MESSAGE ---
-    # Only attach image on the very first exchange (no prior AI replies yet)
-    prior_assistant_count = sum(1 for m in chat_history[:-1] if m["role"] == "assistant")
-    is_first_image_message = (content_type == "image" and context and prior_assistant_count == 0)
+    # Attach image if it exists in the active context
+    should_attach_image = (content_type == "image" and context)
 
     guardrail_reminder = (
-        "\n\n[SYSTEM REMINDER: If this request is NOT related to medicine, health, or the provided medical context, "
-        "you MUST decline and reply EXACTLY with: 'I am a specialized medical AI. I cannot assist with non-medical inquiries. Please ask me a health or medical-related question.']"
+        "\n\n[SYSTEM REMINDER: If this request is a greeting or pleasantry (like 'hi', 'hello', 'hey', etc.), respond in a friendly and welcoming tone, introducing yourself as ScanSense AI. If the request is NOT related to medicine, health, or greetings, you MUST decline and reply with: 'I am ScanSense AI, a specialized medical assistant. I can only help you with medical or health-related questions. Please let me know how I can assist with your health queries!']"
     )
     user_text_with_guardrail = user_text + guardrail_reminder
 
-    if is_first_image_message:
+    if should_attach_image:
         messages.append(HumanMessage(
             content=[
                 {"type": "text", "text": user_text_with_guardrail},
