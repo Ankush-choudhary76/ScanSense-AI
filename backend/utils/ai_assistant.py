@@ -143,9 +143,36 @@ def stream_chat_response(chat_history, context, content_type, user_text, long_te
     }
 
     try:
+        in_thinking = False
+        buffer = ""
         for event in chatbot_app.stream(state, stream_mode="messages"):
             chunk, metadata = event
             if chunk.content and isinstance(chunk.content, str):
-                yield chunk.content
+                buffer += chunk.content
+                while True:
+                    if not in_thinking:
+                        think_start = buffer.find("<think>")
+                        if think_start != -1:
+                            if think_start > 0:
+                                yield buffer[:think_start]
+                            buffer = buffer[think_start + 7:]
+                            in_thinking = True
+                        else:
+                            if len(buffer) > 6:
+                                yield buffer[:-6]
+                                buffer = buffer[-6:]
+                            break
+                    else:
+                        think_end = buffer.find("</think>")
+                        if think_end != -1:
+                            buffer = buffer[think_end + 8:]
+                            in_thinking = False
+                        else:
+                            if len(buffer) > 7:
+                                buffer = buffer[-7:]
+                            break
+        if not in_thinking and buffer:
+            yield buffer
+
     except Exception as e:
         yield f"\nAPI Error: {e}"
