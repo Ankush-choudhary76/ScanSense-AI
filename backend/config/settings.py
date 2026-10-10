@@ -11,7 +11,7 @@ LAYOUT = "wide"
 INITIAL_SIDEBAR_STATE = "collapsed"
 
 # Model configuration
-MODEL_NAME = "qwen/qwen3.6-27b"
+MODEL_NAME = "qwen/qwen3.8-27b"
 
 # API Configuration
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
